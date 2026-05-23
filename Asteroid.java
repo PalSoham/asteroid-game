@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.security.SecureRandom;
 
 /**
  * Represents an asteroid in space that can collide with either the ship
@@ -10,14 +11,16 @@ import java.awt.Color;
 
 public class Asteroid extends SpaceObject
 {
+    private static final SecureRandom random = new SecureRandom();
+
     /**
      * No-args constructor for Asteroid.
      */
     public Asteroid()
     {
-        super(new Position(Math.random() * GameConstants.SCREEN_WIDTH,
-                        Math.random() * GameConstants.SCREEN_HEIGHT, Math.random() * (2 * Math.PI)),
-                new VelocityVector(Math.random() * (2 * Math.PI), Math.random() * 4));
+        super(new Position(random.nextDouble() * GameConstants.SCREEN_WIDTH,
+                        random.nextDouble() * GameConstants.SCREEN_HEIGHT, random.nextDouble() * (2 * Math.PI)),
+                new VelocityVector(random.nextDouble() * (2 * Math.PI), random.nextDouble() * 4));
     }
 
     /**
