@@ -16,6 +16,7 @@ public class Ship extends SpaceObject
     private int lives;
     /** The score for the game */
     private int score;
+    private boolean shieldActive;
 
     public Ship()
     {
@@ -24,6 +25,22 @@ public class Ship extends SpaceObject
                 new VelocityVector(Math.PI / 2.0, 0));
         lives = 3;
         score = 0;
+        shieldActive = false;
+    }
+
+    public void activateShield()
+    {
+        shieldActive = true;
+    }
+
+    public void deactivateShield()
+    {
+        shieldActive = false;
+    }
+
+    public boolean hasShield()
+    {
+        return shieldActive;
     }
 
     public void turn(double value)
@@ -60,6 +77,10 @@ public class Ship extends SpaceObject
     {
         StdDraw.setPenColor(StdDraw.WHITE);
         GameUtils.drawPositionAsTriangle(getPosition(), 20, 40);
+        if (shieldActive) {
+            StdDraw.setPenColor(StdDraw.CYAN);
+            StdDraw.circle(getPosition().getX(), getPosition().getY(), 30);
+        }
     }
 
     public void update()
@@ -72,6 +93,16 @@ public class Ship extends SpaceObject
     public boolean collision(Asteroid a)
     {
         double dist = Math.sqrt(Math.pow(getPosition().getX() - a.getPosition().getX(), 2) + Math.pow(getPosition().getY() - a.getPosition().getY(), 2));
+        if(dist <= 30)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean collision(PowerUp p)
+    {
+        double dist = Math.sqrt(Math.pow(getPosition().getX() - p.getPosition().getX(), 2) + Math.pow(getPosition().getY() - p.getPosition().getY(), 2));
         if(dist <= 30)
         {
             return true;
