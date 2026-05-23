@@ -1,5 +1,8 @@
 import java.awt.event.KeyEvent;
 import java.awt.Font;
+import java.io.File;
+import java.util.Scanner;
+import java.io.PrintWriter;
 
 /**
  * Creates an instance of the Asteroids game and runs it.
@@ -19,8 +22,32 @@ public class GameDriver
      *
      * @param args      command line arguments (ignored)
      */
+    private static int highScore = 0;
+
     public static void main(String[] args)
     {
+        try {
+            File file = new File("../highscore.txt");
+            if (file.exists()) {
+                Scanner scanner = new Scanner(file);
+                if (scanner.hasNextInt()) {
+                    highScore = scanner.nextInt();
+                }
+                scanner.close();
+            } else {
+                file = new File("highscore.txt");
+                if (file.exists()) {
+                    Scanner scanner = new Scanner(file);
+                    if (scanner.hasNextInt()) {
+                        highScore = scanner.nextInt();
+                    }
+                    scanner.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         StdDraw.setCanvasSize(GameConstants.SCREEN_WIDTH, GameConstants.SCREEN_HEIGHT);
         StdDraw.setXscale(0, GameConstants.SCREEN_WIDTH);
         StdDraw.setYscale(0, GameConstants.SCREEN_HEIGHT);
@@ -135,7 +162,7 @@ public class GameDriver
         StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
         String[] lines = {
                 "LEFT / RIGHT ARROW  -  Rotate ship",
-                "DOWN ARROW          -  Thrust forward",
+                "UP ARROW            -  Thrust forward",
                 "SPACE               -  Fire burst",
         };
         int lineY = cy + 75;
@@ -176,6 +203,23 @@ public class GameDriver
      */
     private static void drawGameOverScreen(int score)
     {
+        if (score > highScore) {
+            highScore = score;
+            try {
+                PrintWriter writer = new PrintWriter(new File("highscore.txt"));
+                writer.println(highScore);
+                writer.close();
+            } catch (Exception e) {
+                try {
+                    PrintWriter writer = new PrintWriter(new File("../highscore.txt"));
+                    writer.println(highScore);
+                    writer.close();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                }
+            }
+        }
+
         int cx = GameConstants.SCREEN_WIDTH / 2;
         int cy = GameConstants.SCREEN_HEIGHT / 2;
 
@@ -191,7 +235,10 @@ public class GameDriver
         // Final score
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.setFont(new Font("Courier New", Font.BOLD, 26));
-        StdDraw.text(cx, cy + 30, "Final Score: " + score);
+        StdDraw.text(cx, cy + 45, "Final Score: " + score);
+        StdDraw.setFont(new Font("Courier New", Font.BOLD, 22));
+        StdDraw.setPenColor(StdDraw.YELLOW);
+        StdDraw.text(cx, cy + 15, "High Score: " + highScore);
 
         // Blinking restart prompt
         long frame = System.currentTimeMillis() / 600;

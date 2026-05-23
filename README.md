@@ -17,7 +17,7 @@ Navigate your ship through a field of drifting asteroids. Shoot them down to rac
 | Key | Action |
 |-----|--------|
 | `←` / `→` | Rotate ship |
-| `↓` | Thrust forward |
+| `↑` | Thrust forward |
 | `Space` | Fire burst |
 | `Space` (Game Over) | Restart |
 | `Esc` (Game Over) | Return to title screen |
@@ -65,6 +65,10 @@ javac src/*.java -d out
 java -cp out GameDriver
 ```
 
+## Screenshots
+
+[//]: # (Add screenshot links here)
+
 Or in one step (Java 11+):
 
 ```bash
@@ -92,10 +96,10 @@ All moving objects extend `SpaceObject`, which handles wrap-around screen moveme
 
 ## Known Issues / Future Ideas
 
-- [ ] Sound effects
-- [ ] High-score persistence
-- [ ] Multiple asteroid sizes with split-on-hit behaviour
-- [ ] Shield power-up
+- [x] Sound effects
+- [x] High-score persistence
+- [x] Multiple asteroid sizes with split-on-hit behaviour
+- [x] Shield power-up
 
 ---
 

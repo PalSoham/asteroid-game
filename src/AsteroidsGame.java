@@ -19,6 +19,7 @@ public class AsteroidsGame
     private ArrayList<Burst> bursts;
     private ArrayList<Star> starfield;
     private ArrayList<Asteroid> asteroids;
+    private ArrayList<PowerUp> powerups;
 
     public AsteroidsGame()
     {
@@ -26,6 +27,7 @@ public class AsteroidsGame
         starfield = new ArrayList<Star>();
         bursts = new ArrayList<Burst>();
         asteroids = new ArrayList<Asteroid>();
+        powerups = new ArrayList<PowerUp>();
         for (int i = 0; i < 300; i++)
         {
             starfield.add(new Star());
@@ -87,6 +89,10 @@ public class AsteroidsGame
         {
             asteroids.get(i).draw();
         }
+        for (int i = 0; i < powerups.size(); i++)
+        {
+            powerups.get(i).draw();
+        }
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.text(50, 50, "Score: " + ship.getScore());
         StdDraw.text(50, 20, "Lives: " + ship.getLives());
@@ -111,6 +117,13 @@ public class AsteroidsGame
             asteroids.get(i).update();
             asteroids.get(i).changeHeading();
         }
+        if (Math.random() < 0.002) {
+            powerups.add(new PowerUp());
+        }
+        for (int i = 0; i < powerups.size(); i++)
+        {
+            powerups.get(i).update();
+        }
         if (ship.getLives() > 0)
         {
             for (int i = 0; i < bursts.size(); i++)
@@ -131,13 +144,14 @@ public class AsteroidsGame
             {
                 ship.turn(-0.04);
             }
-            if (StdDraw.isKeyPressed(KeyEvent.VK_DOWN))
+            if (StdDraw.isKeyPressed(KeyEvent.VK_UP))
             {
                 ship.thrust(0.1);
             }
             if (StdDraw.hasNextKeyTyped() && StdDraw.nextKeyTyped() == ' ')
             {
                 bursts.add(new Burst(ship.getPosition()));
+                SoundEffect.playShoot();
             }
             ship.update();
 
@@ -148,7 +162,13 @@ public class AsteroidsGame
                     if (bursts.get(i).collision(asteroids.get(k)))
                     {
                         bursts.remove(i);
+                        Asteroid hit = asteroids.get(k);
                         asteroids.remove(k);
+                        SoundEffect.playExplosion();
+                        if (hit.getSize() > 1) {
+                            asteroids.add(new Asteroid(new Position(hit.getPosition().getX(), hit.getPosition().getY(), Math.random() * 2 * Math.PI), new VelocityVector(Math.random() * 2 * Math.PI, Math.random() * 4), hit.getSize() - 1));
+                            asteroids.add(new Asteroid(new Position(hit.getPosition().getX(), hit.getPosition().getY(), Math.random() * 2 * Math.PI), new VelocityVector(Math.random() * 2 * Math.PI, Math.random() * 4), hit.getSize() - 1));
+                        }
                         ship.increaseScore();
                         k--;
                         i--;
@@ -156,12 +176,38 @@ public class AsteroidsGame
                     }
                 }
             }
+            for (int i = 0; i < powerups.size(); i++)
+            {
+                if (ship.collision(powerups.get(i)))
+                {
+                    ship.activateShield();
+                    powerups.remove(i);
+                    SoundEffect.playPowerUp();
+                    i--;
+                }
+            }
             for (int i = 0; i < asteroids.size(); i++)
             {
                 if (ship.collision(asteroids.get(i)))
                 {
-                    asteroids.remove(i);
-                    ship.reduceLives();
+                    if (ship.hasShield()) {
+                        ship.deactivateShield();
+                        Asteroid hit = asteroids.get(i);
+                        asteroids.remove(i);
+                        SoundEffect.playExplosion();
+                        if (hit.getSize() > 1) {
+                            // Spawn child asteroids safely outside of the player's immediate collision radius
+                            double safeDist = 35.0; // Slightly larger than ship's collision radius
+                            double ang1 = Math.random() * 2 * Math.PI;
+                            double ang2 = Math.random() * 2 * Math.PI;
+                            asteroids.add(new Asteroid(new Position(hit.getPosition().getX() + Math.cos(ang1) * safeDist, hit.getPosition().getY() + Math.sin(ang1) * safeDist, Math.random() * 2 * Math.PI), new VelocityVector(Math.random() * 2 * Math.PI, Math.random() * 4), hit.getSize() - 1));
+                            asteroids.add(new Asteroid(new Position(hit.getPosition().getX() + Math.cos(ang2) * safeDist, hit.getPosition().getY() + Math.sin(ang2) * safeDist, Math.random() * 2 * Math.PI), new VelocityVector(Math.random() * 2 * Math.PI, Math.random() * 4), hit.getSize() - 1));
+                        }
+                    } else {
+                        asteroids.remove(i);
+                        SoundEffect.playExplosion();
+                        ship.reduceLives();
+                    }
                     i--;
                 }
             }

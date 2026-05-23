@@ -10,6 +10,8 @@ import java.awt.Color;
 
 public class Asteroid extends SpaceObject
 {
+    private int size;
+
     /**
      * No-args constructor for Asteroid.
      */
@@ -18,6 +20,18 @@ public class Asteroid extends SpaceObject
         super(new Position(Math.random() * GameConstants.SCREEN_WIDTH,
                         Math.random() * GameConstants.SCREEN_HEIGHT, Math.random() * (2 * Math.PI)),
                 new VelocityVector(Math.random() * (2 * Math.PI), Math.random() * 4));
+        this.size = 3;
+    }
+
+    public Asteroid(Position p, VelocityVector v, int size)
+    {
+        super(p, v);
+        this.size = size;
+    }
+
+    public int getSize()
+    {
+        return size;
     }
 
     /**
@@ -35,7 +49,7 @@ public class Asteroid extends SpaceObject
     public void draw()
     {
         StdDraw.setPenColor(StdDraw.WHITE);
-        GameUtils.drawPositionAsPolygon(getPosition(), 26);
+        GameUtils.drawPositionAsPolygon(getPosition(), 9 * size);
     }
 
     /**
