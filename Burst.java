@@ -63,8 +63,10 @@ public class Burst extends SpaceObject
      */
     public boolean collision(Asteroid a)
     {
-        double dist = Math.sqrt(Math.pow(getPosition().getX() - a.getPosition().getX(), 2) + Math.pow(getPosition().getY() - a.getPosition().getY(), 2));
-        if(dist <= 25)
+        double dx = getPosition().getX() - a.getPosition().getX();
+        double dy = getPosition().getY() - a.getPosition().getY();
+        double distSq = dx * dx + dy * dy;
+        if(distSq <= 625)
         {
             return true;
         }
