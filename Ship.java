@@ -71,8 +71,10 @@ public class Ship extends SpaceObject
 
     public boolean collision(Asteroid a)
     {
-        double dist = Math.sqrt(Math.pow(getPosition().getX() - a.getPosition().getX(), 2) + Math.pow(getPosition().getY() - a.getPosition().getY(), 2));
-        if(dist <= 30)
+        double dx = getPosition().getX() - a.getPosition().getX();
+        double dy = getPosition().getY() - a.getPosition().getY();
+        double distSq = dx * dx + dy * dy;
+        if(distSq <= 900.0)
         {
             return true;
         }
