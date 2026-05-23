@@ -1,5 +1,4 @@
 import java.awt.Color;
-import java.util.Random;
 
 /**
  * Constants related to the Asteroids game.
