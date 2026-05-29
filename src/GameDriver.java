@@ -23,26 +23,24 @@ public class GameDriver
      * @param args      command line arguments (ignored)
      */
     private static int highScore = 0;
+    private static File highScoreFile = null;
 
     public static void main(String[] args)
     {
+        boolean inSrcDir = new File("GameDriver.class").exists() || new File("Ship.class").exists();
+        if (inSrcDir) {
+            highScoreFile = new File("../highscore.txt");
+        } else {
+            highScoreFile = new File("highscore.txt");
+        }
+
         try {
-            File file = new File("../highscore.txt");
-            if (file.exists()) {
-                Scanner scanner = new Scanner(file);
+            if (highScoreFile.exists()) {
+                Scanner scanner = new Scanner(highScoreFile);
                 if (scanner.hasNextInt()) {
                     highScore = scanner.nextInt();
                 }
                 scanner.close();
-            } else {
-                file = new File("highscore.txt");
-                if (file.exists()) {
-                    Scanner scanner = new Scanner(file);
-                    if (scanner.hasNextInt()) {
-                        highScore = scanner.nextInt();
-                    }
-                    scanner.close();
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -144,21 +142,20 @@ public class GameDriver
 
         // Title
         StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.setFont(new Font("Courier New", Font.BOLD, 64));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 64));
         StdDraw.text(cx, cy + 180, "ASTEROIDS");
 
         // Decorative line
         StdDraw.setPenColor(StdDraw.GRAY);
-        StdDraw.setFont(new Font("Courier New", Font.PLAIN, 16));
         StdDraw.line(cx - 200, cy + 145, cx + 200, cy + 145);
 
         // Controls heading
         StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.setFont(new Font("Courier New", Font.BOLD, 20));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 22));
         StdDraw.text(cx, cy + 110, "HOW TO PLAY");
 
         // Controls list
-        StdDraw.setFont(new Font("Courier New", Font.PLAIN, 16));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 16));
         StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
         String[] lines = {
                 "LEFT / RIGHT ARROW  -  Rotate ship",
@@ -173,7 +170,7 @@ public class GameDriver
         }
 
         // Scoring
-        StdDraw.setFont(new Font("Courier New", Font.PLAIN, 16));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 16));
         StdDraw.setPenColor(StdDraw.YELLOW);
         StdDraw.text(cx, lineY - 10, "+20 points for each asteroid destroyed");
 
@@ -186,12 +183,12 @@ public class GameDriver
         if (frame % 2 == 0)
         {
             StdDraw.setPenColor(StdDraw.WHITE);
-            StdDraw.setFont(new Font("Courier New", Font.BOLD, 22));
+            StdDraw.setFont(new Font("SansSerif", Font.BOLD, 22));
             StdDraw.text(cx, cy - 160, "PRESS SPACE TO START");
         }
 
         // Footer
-        StdDraw.setFont(new Font("Courier New", Font.PLAIN, 12));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 13));
         StdDraw.setPenColor(StdDraw.GRAY);
         StdDraw.text(cx, 30, "by Soham Pal");
     }
@@ -206,17 +203,16 @@ public class GameDriver
         if (score > highScore) {
             highScore = score;
             try {
-                PrintWriter writer = new PrintWriter(new File("highscore.txt"));
+                if (highScoreFile == null) {
+                    File localFile = new File("highscore.txt");
+                    File parentFile = new File("../highscore.txt");
+                    highScoreFile = parentFile.exists() ? parentFile : localFile;
+                }
+                PrintWriter writer = new PrintWriter(highScoreFile);
                 writer.println(highScore);
                 writer.close();
             } catch (Exception e) {
-                try {
-                    PrintWriter writer = new PrintWriter(new File("../highscore.txt"));
-                    writer.println(highScore);
-                    writer.close();
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
+                e.printStackTrace();
             }
         }
 
@@ -229,14 +225,14 @@ public class GameDriver
 
         // Game Over heading
         StdDraw.setPenColor(StdDraw.RED);
-        StdDraw.setFont(new Font("Courier New", Font.BOLD, 52));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 52));
         StdDraw.text(cx, cy + 90, "GAME OVER");
 
         // Final score
         StdDraw.setPenColor(StdDraw.WHITE);
-        StdDraw.setFont(new Font("Courier New", Font.BOLD, 26));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 26));
         StdDraw.text(cx, cy + 45, "Final Score: " + score);
-        StdDraw.setFont(new Font("Courier New", Font.BOLD, 22));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 22));
         StdDraw.setPenColor(StdDraw.YELLOW);
         StdDraw.text(cx, cy + 15, "High Score: " + highScore);
 
@@ -245,13 +241,13 @@ public class GameDriver
         if (frame % 2 == 0)
         {
             StdDraw.setPenColor(StdDraw.WHITE);
-            StdDraw.setFont(new Font("Courier New", Font.BOLD, 18));
+            StdDraw.setFont(new Font("SansSerif", Font.BOLD, 18));
             StdDraw.text(cx, cy - 30, "SPACE to Play Again");
         }
 
         // ESC option
         StdDraw.setPenColor(StdDraw.LIGHT_GRAY);
-        StdDraw.setFont(new Font("Courier New", Font.PLAIN, 15));
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 15));
         StdDraw.text(cx, cy - 65, "ESC for Title Screen");
     }
 }

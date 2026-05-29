@@ -48,7 +48,12 @@ public class Asteroid extends SpaceObject
      */
     public void draw()
     {
-        StdDraw.setPenColor(StdDraw.WHITE);
+        // Deep dangerous red solid body
+        StdDraw.setPenColor(new Color(190, 30, 30));
+        GameUtils.drawPositionAsFilledPolygon(getPosition(), 9 * size);
+
+        // Brighter glowing coral-red border
+        StdDraw.setPenColor(new Color(255, 75, 75));
         GameUtils.drawPositionAsPolygon(getPosition(), 9 * size);
     }
 

@@ -73,13 +73,79 @@ public class Ship extends SpaceObject
         lives--;
     }
 
+    private void drawShipPart(Point[] shipPoints, Color color)
+    {
+        double[] xs = new double[shipPoints.length];
+        double[] ys = new double[shipPoints.length];
+        for (int i = 0; i < shipPoints.length; i++)
+        {
+            Point screenPt = GameUtils.transformPositionToScreen(getPosition(), shipPoints[i]);
+            xs[i] = screenPt.getX();
+            ys[i] = screenPt.getY();
+        }
+        StdDraw.setPenColor(color);
+        StdDraw.filledPolygon(xs, ys);
+    }
+
     public void draw()
     {
-        StdDraw.setPenColor(StdDraw.WHITE);
-        GameUtils.drawPositionAsTriangle(getPosition(), 20, 40);
+        // 1. Thruster flame when moving forward
+        if (StdDraw.isKeyPressed(java.awt.event.KeyEvent.VK_UP))
+        {
+            double flameLength = 18 + Math.random() * 14;
+            Point[] outerFlame = {
+                new Point(-15, -4),
+                new Point(-15 - flameLength, 0),
+                new Point(-15, 4)
+            };
+            drawShipPart(outerFlame, new Color(255, 100, 0));
+
+            Point[] innerFlame = {
+                new Point(-15, -2.5),
+                new Point(-15 - flameLength * 0.6, 0),
+                new Point(-15, 2.5)
+            };
+            drawShipPart(innerFlame, new Color(255, 230, 0));
+        }
+
+        // 2. Swept-back wings
+        Point[] leftWing = {
+            new Point(0, -6),
+            new Point(-18, -16),
+            new Point(-10, -6)
+        };
+        drawShipPart(leftWing, new Color(110, 130, 160));
+
+        Point[] rightWing = {
+            new Point(0, 6),
+            new Point(-18, 16),
+            new Point(-10, 6)
+        };
+        drawShipPart(rightWing, new Color(110, 130, 160));
+
+        // 3. Central metallic fuselage
+        Point[] fuselage = {
+            new Point(20, 0),
+            new Point(-15, -6),
+            new Point(-15, 6)
+        };
+        drawShipPart(fuselage, new Color(235, 240, 250));
+
+        // 4. Glowing cockpit window
+        Point[] cockpit = {
+            new Point(12, 0),
+            new Point(2, -3),
+            new Point(-3, 0),
+            new Point(2, 3)
+        };
+        drawShipPart(cockpit, new Color(0, 240, 255));
+
+        // 5. Shield overlay
         if (shieldActive) {
-            StdDraw.setPenColor(StdDraw.CYAN);
+            StdDraw.setPenColor(new Color(0, 255, 255, 130)); // semi-transparent cyan
             StdDraw.circle(getPosition().getX(), getPosition().getY(), 30);
+            StdDraw.setPenColor(new Color(0, 255, 255, 60));
+            StdDraw.filledCircle(getPosition().getX(), getPosition().getY(), 29);
         }
     }
 

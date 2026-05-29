@@ -93,6 +93,7 @@ public class AsteroidsGame
         {
             powerups.get(i).draw();
         }
+        StdDraw.setFont(new Font("SansSerif", Font.BOLD, 16));
         StdDraw.setPenColor(StdDraw.WHITE);
         StdDraw.text(50, 50, "Score: " + ship.getScore());
         StdDraw.text(50, 20, "Lives: " + ship.getLives());

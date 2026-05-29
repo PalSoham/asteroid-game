@@ -54,11 +54,11 @@ public class GameUtils
      * A helper method, that performs a transform from the coordinate frame defined by
      * a Position object to screen coordinates.
      *
-     * @param Position          the coordinate frame to transform from
+     * @param position          the coordinate frame to transform from
      * @param point             the point to transform (in Position coordinates)
      * @return                  the transformed point (in screen coordinates)
      */
-    private static Point transformPositionToScreen(Position position, Point point)
+    public static Point transformPositionToScreen(Position position, Point point)
     {
         double newX;
         double newY;
@@ -89,5 +89,27 @@ public class GameUtils
                 middleY + (radius - 3) * Math.sin(Math.PI * 1 + direction), middleY + (radius  - 3) * Math.sin(Math.PI * 1.2 + direction),
                 middleY + (radius  + 2) * Math.sin(Math.PI * 1.5 + direction), middleY + (radius  - 0) * Math.sin(Math.PI * 1.9 + direction)};
         StdDraw.polygon(x, y);
+    }
+
+    /**
+     * Draw a filled polygon at the location and heading of the provided
+     * Position. The polygon will be centered at the x,y position of the Position
+     * object.
+     *
+     * @param position           location and heading for the polygon
+     * @param radius             the radius (roughly) of the polygon
+     */
+    public static void drawPositionAsFilledPolygon(Position position, double radius)
+    {
+        double middleX = position.getX();
+        double middleY = position.getY();
+        double direction = position.getHeading();
+        double [] x = {middleX + (radius + 4) * Math.cos(Math.PI * 0.2 + direction), middleX + (radius  - 5) * Math.cos(Math.PI * 0.7 + direction),
+                middleX + (radius - 3) * Math.cos(Math.PI * 1 + direction), middleX + (radius  - 3) * Math.cos(Math.PI * 1.2 + direction),
+                middleX + (radius  + 2) * Math.cos(Math.PI * 1.5 + direction), middleX + (radius  - 0) * Math.cos(Math.PI * 1.9 + direction)};
+        double [] y = {middleY + (radius + 4) * Math.sin(Math.PI * 0.2 + direction), middleY + (radius  - 5) * Math.sin(Math.PI * 0.7 + direction),
+                middleY + (radius - 3) * Math.sin(Math.PI * 1 + direction), middleY + (radius  - 3) * Math.sin(Math.PI * 1.2 + direction),
+                middleY + (radius  + 2) * Math.sin(Math.PI * 1.5 + direction), middleY + (radius  - 0) * Math.sin(Math.PI * 1.9 + direction)};
+        StdDraw.filledPolygon(x, y);
     }
 }
