@@ -1,6 +1,6 @@
-# 🚀 Asteroids
+# Asteroids
 
-A classic **Asteroids** arcade game written in Java, built on Princeton's [StdDraw](https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html) graphics library.
+A classic Asteroids arcade game written in Java, built on Princeton's [StdDraw](https://introcs.cs.princeton.edu/java/stdlib/StdDraw.java.html) graphics library.
 
 ![Java](https://img.shields.io/badge/Java-8%2B-orange?logo=java)
 ![License](https://img.shields.io/badge/License-MIT-blue)
@@ -10,7 +10,7 @@ A classic **Asteroids** arcade game written in Java, built on Princeton's [StdDr
 
 ## Gameplay
 
-Navigate your ship through a field of drifting asteroids. Shoot them down to rack up points — but don't let them hit you! You have **3 lives**. Lose them all and it's game over.
+Navigate your ship through a field of drifting asteroids. Shoot them down to rack up points — but don't let them hit you! You have 3 lives. Lose them all and it's game over.
 
 ### Controls
 
@@ -24,7 +24,7 @@ Navigate your ship through a field of drifting asteroids. Shoot them down to rac
 
 ### Scoring
 
-- Each asteroid destroyed: **+20 points**
+* Each asteroid destroyed: **+20 points**
 
 ---
 
@@ -32,6 +32,9 @@ Navigate your ship through a field of drifting asteroids. Shoot them down to rac
 
 ```
 AsteroidsGame/
+├── screenshots/
+│   ├── main_menu.png         # Main menu screenshot
+│   └── gameplay.png          # Gameplay screenshot
 ├── src/
 │   ├── GameDriver.java       # Entry point; manages START / PLAYING / GAME_OVER states
 │   ├── AsteroidsGame.java    # Core game loop (update + draw)
@@ -45,8 +48,12 @@ AsteroidsGame/
 │   ├── VelocityVector.java   # 2-D velocity vector
 │   ├── GameConstants.java    # Screen size, colors, timing constants
 │   ├── GameUtils.java        # Drawing helpers (triangles, polygons, thrust)
+│   ├── SoundEffect.java      # Audio effects for shooting, explosions, and powerups
+│   ├── PowerUp.java          # Shield power-up mechanics
 │   └── StdDraw.java          # Princeton StdDraw graphics library (bundled)
-└── README.md
+├── .gitignore                # Git exclusions (bytecode, highscore, IDE files)
+├── LICENCE                   # Project license (MIT)
+└── README.md                 # Project documentation
 ```
 
 ---
@@ -55,7 +62,7 @@ AsteroidsGame/
 
 ### Requirements
 
-- Java 8 or later ([download](https://www.java.com/en/download/))
+* Java 8 or later ([download](https://www.java.com/en/download/))
 
 ### Compile & Run
 
@@ -65,16 +72,24 @@ javac src/*.java -d out
 java -cp out GameDriver
 ```
 
-## Screenshots
-
-[//]: # (Add screenshot links here)
-
 Or in one step (Java 11+):
 
 ```bash
 cd src
 javac *.java && java GameDriver
 ```
+
+---
+
+## Screenshots
+
+### Main Menu
+![Main Menu](screenshots/main_menu.png)
+
+### Gameplay
+![Gameplay](screenshots/gameplay.png)
+
+---
 
 ## Architecture Overview
 
@@ -87,19 +102,20 @@ GameDriver  ──controls──►  AsteroidsGame
                │               │
              Burst[]       SpaceObject (abstract)
                                │
-                          Position / VelocityVector
+                           Position / VelocityVector
 ```
 
 All moving objects extend `SpaceObject`, which handles wrap-around screen movement via modular arithmetic on the canvas dimensions.
 
 ---
 
-## Known Issues / Future Ideas
+## Features
 
-- [x] Sound effects
-- [x] High-score persistence
-- [x] Multiple asteroid sizes with split-on-hit behaviour
-- [x] Shield power-up
+* Sound effects for shooting, power-ups, and explosions
+* High-score persistence across sessions
+* Multiple asteroid sizes with split-on-hit behavior
+* Glowing green star shield power-ups
+* Modern spaceship design with animated thrusters and solid-filled glowing red asteroids
 
 ---
 
